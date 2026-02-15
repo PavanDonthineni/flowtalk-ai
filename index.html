@@ -185,6 +185,7 @@ select:focus,input:focus{border-color:var(--accent3)}
 <div class="card">
 <div class="card-title">📝 Script Editor</div>
 <textarea id="scriptText" class="script-editor" placeholder="Type or paste your script here..."></textarea>
+<input type="file" id="fileUpload" accept=".txt">
 <div class="word-count" id="wordCount">0 words</div>
 </div>
 <div class="card">
@@ -905,7 +906,21 @@ a.href=url;a.download='meeting-'+Date.now()+'.md';
 a.click();URL.revokeObjectURL(url);
 toast('📊 Report exported!');
 }
+// FILE UPLOADER
+el('fileUpload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        el('scriptText').value = event.target.result;
+        updateWC();
+        toast("File loaded");
+    };
+
+    reader.readAsText(file);
+});
 // INIT
 
     loadSavedScripts();
